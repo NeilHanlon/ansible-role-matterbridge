@@ -59,10 +59,10 @@
     seuser: system_u
   notify: restart matterbridge
 
-- name: add /usr/lib/systemd/system/matterbridge.service (systemd unit file)
+- name: add /etc/systemd/system/matterbridge.service (systemd unit file)
   copy:
     src: matterbridge.service
-    dest: "/usr/lib/systemd/system/matterbridge.service"
+    dest: "/etc/systemd/system/matterbridge.service"
     mode: 0644
     seuser: system_u
     setype: systemd_unit_file_t
