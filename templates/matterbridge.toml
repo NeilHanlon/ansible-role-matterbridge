@@ -3,16 +3,15 @@
 ###################################################################
 
 [irc]
-[irc.{{ default_irc_network_name }}]
-Server="{{ default_irc_network_server }}"
+[irc.{{ mbridge_bridge_name }}]
+Server="{{ mbridge_irc_network_server }}"
 UseTLS=true
 SkipTLSVerify=false
-UseSASL=false
 
-Nick="{{ default_irc_bot_nick }}"
-#UseSASL=true
-#NickServNick=""
-#NickServPassword=""
+Nick="{{ mbridge_bot_nick }}"
+UseSASL=true
+NickServNick="{{ mbridge_bot_nick }}"
+NickServPassword="{{ mbridge_irc_bot_pass }}"
 
 ## RELOADABLE SETTINGS
 ## Settings below can be reloaded by editing the file
@@ -29,15 +28,12 @@ ColorNicks=true
 #Nicks you want to ignore.
 #Messages from those users will not be sent to other bridges.
 #OPTIONAL
-IgnoreNicks="{{ default_irc_ignore_nicks }}"
-
-#RemoteNickFormat defines how remote users appear on this bridge
-RemoteNickFormat="<{NOPINGNICK}> "
+IgnoreNicks="{{ mbridge_irc_ignore_nicks }}"
 
 #Enable to show users joins/parts from other bridges
 #Currently works for messages from the following bridges: irc, mattermost, slack
 #OPTIONAL (default false)
-ShowJoinPart=true
+ShowJoinPart=false
 
 #Enable to show topic changes from other bridges
 #Only works hiding/show topic changes from slack bridge for now
@@ -45,47 +41,27 @@ ShowJoinPart=true
 ShowTopicChange=true
 
 
-###################################################################
-#slack section
-###################################################################
-[slack]
-[slack.{{ default_slack_team_name }}]
-Token="{{ default_slack_api_token }}"
+[discord.{{ mbridge_bridge_name }}]
+# You can get your token by following the instructions on
+# https://github.com/42wim/matterbridge/wiki/Discord-bot-setup
+# If you want roles/groups mentions to be shown with names instead of ID,
+# you'll need to give your bot the "Manage Roles" permission.
+Token="{{ mbridge_discord_bot_token }}"
+Server="{{ mbridge_discord_server }}" # picked from guilds the bot is connected to
+ShowEmbeds=true
 
-#Icon that will be showed in slack
-#The string "{NICK}" (case sensitive) will be replaced by the actual nick / username.
-#The string "{BRIDGE}" (case sensitive) will be replaced by the sending bridge
-#The string "{LABEL}" (case sensitive) will be replaced by label= field of the sending bridge
-#The string "{PROTOCOL}" (case sensitive) will be replaced by the protocol used by the bridge
-#OPTIONAL
-IconURL="https://robohash.org/{NICK}.png?size=48x48"
+[telegram.{{ mbridge_bridge_name }}]
+#See https://core.telegram.org/bots#6-botfather
+#and https://www.linkedin.com/pulse/telegram-bots-beginners-marco-frau
+Token="{{ mbridge_telegram_bot_token }}"
+MessageFormat="MarkdownV2"
 
-## RELOADABLE SETTINGS
-## Settings below can be reloaded by editing the file
-
-#Message to be appended to every edited message
-#OPTIONAL (default empty)
-EditSuffix=" (edited)"
-
-#Whether to prefix messages from other bridges to mattermost with RemoteNickFormat
-#Useful if username overrides for incoming webhooks isn't enabled on the
-#slack server. If you set PrefixMessagesWithNick to true, each message
-#from bridge to Slack will by default be prefixed by "bridge-" + nick. You can,
-#however, modify how the messages appear, by setting (and modifying) RemoteNickFormat
-#OPTIONAL (default false)
-PrefixMessagesWithNick=false
-
-#Nicks you want to ignore.
-#Messages from those users will not be sent to other bridges.
-#OPTIONAL
-IgnoreNicks="{{ default_slack_ignore_nicks }}"
-
-#Opportunistically preserve threaded replies between Slack channels.
-#This only works if the parent message is still in the cache.
-#Cache is flushed between restarts.
-#OPTIONAL (default false)
-PreserveThreading=true
-
+# [whatsapp.{{ mbridge_bridge_name }}]
+# RemoteNickFormat="@{NICK}: "
+# Label="{{ mbridge_whatsapp_label }}"
+# Number="{{ mbridge_whatsapp_number }}"
+# SessionFile="{{ mbridge_whatsapp_session_file }}"
+# QrOnWhiteTerminal=false
 
 ###################################################################
 #General configuration
@@ -146,13 +122,17 @@ RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
 ###################################################################
 
 [[gateway]]
-name="gateway_mycommunity"
+name="{{ mbridge_bridge_name }}"
 enable=true
 
     [[gateway.inout]]
-    account="irc.{{ default_irc_network_name }}"
-    channel="{{ matterbridge_config.my_community.irc.channel }}"
+    account="irc.{{ mbridge_bridge_name }}"
+    channel="{{ mbridge_irc_channel }}"
 
     [[gateway.inout]]
-    account="slack.{{ default_slack_team_name }}"
-    channel="{{ matterbridge_config.my_community.slack.channel }}"
+    account = "discord.{{ mbridge_bridge_name }}"
+    channel="{{ mbridge_discord_channel }}"
+
+    [[gateway.inout]]
+    account="telegram.{{ mbridge_bridge_name }}"
+    channel="{{ mbridge_telegram_chat_id }}"
