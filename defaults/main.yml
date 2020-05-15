@@ -27,3 +27,7 @@ matterbridge_config:
       channel: "##my-other-community"
     slack:
       channel: random
+
+mbridge_irc_label: IRC
+mbridge_telegram_label: TG
+mbridge_discord_label: DSCD

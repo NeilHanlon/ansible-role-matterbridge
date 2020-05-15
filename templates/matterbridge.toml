@@ -12,6 +12,7 @@ Nick="{{ mbridge_bot_nick }}"
 UseSASL=true
 NickServNick="{{ mbridge_bot_nick }}"
 NickServPassword="{{ mbridge_irc_bot_pass }}"
+Label="{{ mbridge_irc_label }}"
 
 ## RELOADABLE SETTINGS
 ## Settings below can be reloaded by editing the file
@@ -49,12 +50,14 @@ ShowTopicChange=true
 Token="{{ mbridge_discord_bot_token }}"
 Server="{{ mbridge_discord_server }}" # picked from guilds the bot is connected to
 ShowEmbeds=true
+Label="{{ mbridge_discord_label }}"
 
 [telegram.{{ mbridge_bridge_name }}]
 #See https://core.telegram.org/bots#6-botfather
 #and https://www.linkedin.com/pulse/telegram-bots-beginners-marco-frau
 Token="{{ mbridge_telegram_bot_token }}"
 MessageFormat="MarkdownV2"
+Label="{{ mbridge_telegram_label }}"
 
 # [whatsapp.{{ mbridge_bridge_name }}]
 # RemoteNickFormat="@{NICK}: "
@@ -80,7 +83,7 @@ MessageFormat="MarkdownV2"
 #The string "{GATEWAY}" (case sensitive) will be replaced by the origin gateway name that is replicating the message.
 #The string "{CHANNEL}" (case sensitive) will be replaced by the origin channel name used by the bridge
 #OPTIONAL (default empty)
-RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
+RemoteNickFormat="[{LABEL}] <{NICK}> "
 
 #MediaServerUpload (or MediaDownloadPath) and MediaServerDownload are used for uploading
 #images/files/video to a remote "mediaserver" (a webserver like caddy for example).
