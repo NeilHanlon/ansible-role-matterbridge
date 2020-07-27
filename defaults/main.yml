@@ -11,8 +11,8 @@ default_slack_ignore_nicks: ""
 default_slack_team_name: myorg
 
 matterbridge_config:
-  binary_checksum: "7a12fd593b8a4f97f0d25c9a6de2197792a9cfd3baa6308824272a4e34424fb1"
-  version: 1.17.4
+  binary_checksum: "7cc2c2303cc7b532ed4734659e06446541a86cc26380f0e2e3f50129081504c1"
+  version: 1.18.0
 
   my_community:
     irc:
