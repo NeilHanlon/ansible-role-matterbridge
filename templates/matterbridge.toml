@@ -13,6 +13,7 @@ UseSASL=true
 NickServNick="{{ mbridge_bot_nick }}"
 NickServPassword="{{ mbridge_irc_bot_pass }}"
 Label="{{ mbridge_irc_label }}"
+StripMarkdown=true
 
 ## RELOADABLE SETTINGS
 ## Settings below can be reloaded by editing the file
