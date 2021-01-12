@@ -59,6 +59,7 @@ Label="{{ mbridge_discord_label }}"
 Token="{{ mbridge_telegram_bot_token }}"
 MessageFormat="MarkdownV2"
 Label="{{ mbridge_telegram_label }}"
+RemoteNickFormat="\\[{LABEL}\\] \\<{NICK}\\> "
 
 # [whatsapp.{{ mbridge_bridge_name }}]
 # RemoteNickFormat="@{NICK}: "
