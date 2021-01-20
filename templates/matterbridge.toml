@@ -13,7 +13,7 @@ UseSASL=true
 NickServNick="{{ mbridge_bot_nick }}"
 NickServPassword="{{ mbridge_irc_bot_pass }}"
 Label="{{ mbridge_irc_label }}"
-StripMarkdown=true
+# StripMarkdown=true
 
 ## RELOADABLE SETTINGS
 ## Settings below can be reloaded by editing the file
@@ -57,9 +57,9 @@ Label="{{ mbridge_discord_label }}"
 #See https://core.telegram.org/bots#6-botfather
 #and https://www.linkedin.com/pulse/telegram-bots-beginners-marco-frau
 Token="{{ mbridge_telegram_bot_token }}"
-MessageFormat="MarkdownV2"
+MessageFormat="HTMLNick"
 Label="{{ mbridge_telegram_label }}"
-RemoteNickFormat="\\[{LABEL}\\] \\<{NICK}\\> "
+RemoteNickFormat="[{LABEL}] &lt;{NICK}&gt; "
 
 # [whatsapp.{{ mbridge_bridge_name }}]
 # RemoteNickFormat="@{NICK}: "
