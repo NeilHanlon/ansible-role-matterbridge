@@ -43,30 +43,118 @@ ShowJoinPart=false
 ShowTopicChange=true
 
 
-[discord.{{ mbridge_bridge_name }}]
-# You can get your token by following the instructions on
-# https://github.com/42wim/matterbridge/wiki/Discord-bot-setup
-# If you want roles/groups mentions to be shown with names instead of ID,
-# you'll need to give your bot the "Manage Roles" permission.
-Token="{{ mbridge_discord_bot_token }}"
-Server="{{ mbridge_discord_server }}" # picked from guilds the bot is connected to
-ShowEmbeds=true
-Label="{{ mbridge_discord_label }}"
+###################################################################
+#mattermost section
+###################################################################
+[mattermost]
+#You can configure multiple servers "[mattermost.name]" or "[mattermost.name2]"
+#In this example we use [mattermost.work]
+#REQUIRED
 
-[telegram.{{ mbridge_bridge_name }}]
-#See https://core.telegram.org/bots#6-botfather
-#and https://www.linkedin.com/pulse/telegram-bots-beginners-marco-frau
-Token="{{ mbridge_telegram_bot_token }}"
-MessageFormat="HTMLNick"
-Label="{{ mbridge_telegram_label }}"
-RemoteNickFormat="[{LABEL}] &lt;{NICK}&gt; "
+[mattermost.{{ mbridge_bridge_name }}]
+Server="{{ mbridge_mattermost_server }}"
+Team="{{ mbridge_mattermost_team }}"
+Token="{{ mbridge_mattermost_token }}"
 
-# [whatsapp.{{ mbridge_bridge_name }}]
-# RemoteNickFormat="@{NICK}: "
-# Label="{{ mbridge_whatsapp_label }}"
-# Number="{{ mbridge_whatsapp_number }}"
-# SessionFile="{{ mbridge_whatsapp_session_file }}"
-# QrOnWhiteTerminal=false
+NoTLS=false
+SkipTLSVerify=false
+
+## RELOADABLE SETTINGS
+## Settings below can be reloaded by editing the file
+
+#how to format the list of IRC nicks when displayed in mattermost.
+#Possible options are "table" and "plain"
+#OPTIONAL (default plain)
+NickFormatter="table "
+#How many nicks to list per row for formatters that support this.
+#OPTIONAL (default 4)
+NicksPerRow=4
+
+#Skip the Mattermost server version checks that are normally done when connecting.
+#The usage scenario for this feature would be when the Mattermost instance is hosted behind a
+#reverse proxy that suppresses "non-standard" response headers in flight.
+#OPTIONAL (default false)
+SkipVersionCheck=false
+
+#Whether to prefix messages from other bridges to mattermost with the sender's nick.
+#Useful if username overrides for incoming webhooks isn't enabled on the
+#mattermost server. If you set PrefixMessagesWithNick to true, each message
+#from bridge to Mattermost will by default be prefixed by "bridge-" + nick. You can,
+#however, modify how the messages appear, by setting (and modifying) RemoteNickFormat
+#OPTIONAL (default false)
+PrefixMessagesWithNick=true
+
+#Disable sending of edits to other bridges
+#OPTIONAL (default false)
+EditDisable=false
+
+#Message to be appended to every edited message
+#OPTIONAL (default empty)
+EditSuffix=" (edited)"
+
+#Nicks you want to ignore.
+#Regular expressions supported
+#Messages from those users will not be sent to other bridges.
+#OPTIONAL
+IgnoreNicks="{{ mbridge_mattermost_ignore_nicks }}"
+
+#Messages you want to ignore.
+#Messages matching these regexp will be ignored and not sent to other bridges
+#See https://regex-golang.appspot.com/assets/html/index.html for more regex info
+#OPTIONAL (example below ignores messages starting with ~~ or messages containing badword
+IgnoreMessages=""
+
+#messages you want to replace.
+#it replaces outgoing messages from the bridge.
+#so you need to place it by the sending bridge definition.
+#regular expressions supported
+#some examples:
+#this replaces cat => dog and sleep => awake
+#replacemessages=[ ["cat","dog"], ["sleep","awake"] ]
+#this replaces every number with number.  123 => numbernumbernumber
+#replacemessages=[ ["[0-9]","number"] ]
+#optional (default empty)
+ReplaceMessages=[ ]
+
+#nicks you want to replace.
+#see replacemessages for syntaxa
+#optional (default empty)
+ReplaceNicks=[ ]
+
+#Extractnicks is used to for example rewrite messages from other relaybots
+#See https://github.com/42wim/matterbridge/issues/713 and https://github.com/42wim/matterbridge/issues/466
+#some examples:
+#this replaces a message like "Relaybot: <relayeduser> something interesting" to "relayeduser: something interesting"
+#ExtractNicks=[ [ "Relaybot", "<(.*?)>\\s+" ] ]
+#you can use multiple entries for multiplebots
+#this also replaces a message like "otherbot: (relayeduser) something else" to "relayeduser: something else"
+#ExtractNicks=[ [ "Relaybot", "<(.*?)>\\s+" ],[ "otherbot","\\((.*?)\\)\\s+" ]
+#OPTIONAL (default empty)
+ExtractNicks=[  ]
+
+#extra label that can be used in the RemoteNickFormat
+#optional (default empty)
+Label="{{ mbridge_mattermost_label }}"
+
+#Enable to show users joins/parts from other bridges
+#Currently works for messages from the following bridges: irc, mattermost, slack, discord
+#OPTIONAL (default false)
+ShowJoinPart=false
+
+#Do not send joins/parts to other bridges
+#Currently works for messages from the following bridges: irc, mattermost, slack
+#OPTIONAL (default false)
+NoSendJoinPart=true
+
+#StripNick only allows alphanumerical nicks. See https://github.com/42wim/matterbridge/issues/285
+#It will strip other characters from the nick
+#OPTIONAL (default false)
+StripNick=false
+
+#Enable to show topic changes from other bridges
+#Only works hiding/show topic changes from slack bridge for now
+#OPTIONAL (default false)
+ShowTopicChange=false
 
 ###################################################################
 #General configuration
@@ -85,7 +173,7 @@ RemoteNickFormat="[{LABEL}] &lt;{NICK}&gt; "
 #The string "{GATEWAY}" (case sensitive) will be replaced by the origin gateway name that is replicating the message.
 #The string "{CHANNEL}" (case sensitive) will be replaced by the origin channel name used by the bridge
 #OPTIONAL (default empty)
-RemoteNickFormat="[{LABEL}] <{NICK}> "
+RemoteNickFormat="<{NICK}> "
 
 #MediaServerUpload (or MediaDownloadPath) and MediaServerDownload are used for uploading
 #images/files/video to a remote "mediaserver" (a webserver like caddy for example).
@@ -135,9 +223,5 @@ enable=true
     channel="{{ mbridge_irc_channel }}"
 
     [[gateway.inout]]
-    account = "discord.{{ mbridge_bridge_name }}"
-    channel="{{ mbridge_discord_channel }}"
-
-    [[gateway.inout]]
-    account="telegram.{{ mbridge_bridge_name }}"
-    channel="{{ mbridge_telegram_chat_id }}"
+    account="mattermost.{{ mbridge_bridge_name }}"
+    channel="{{ mbridge_mattermost_channel }}"

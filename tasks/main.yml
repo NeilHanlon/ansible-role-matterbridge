@@ -1,8 +1,5 @@
 ---
 # tasks file for matterbridge
-- name: import Vault-encrypted variables
-  include_vars: vault.yml
-
 - name: install golang (v1.8+ required)
   package:
     state: present

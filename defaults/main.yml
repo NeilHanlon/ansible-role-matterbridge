@@ -1,33 +1,21 @@
 ---
 # defaults file for matterbridge
 
-default_irc_bot_nick: slack-myorg
-default_irc_ignore_nicks: "cowsaybot"
-default_irc_network_name: freenode
-default_irc_network_server: chat.freenode.net:6697
-
-default_slack_api_token: "{{ vault_slack_api_token }}"
-default_slack_ignore_nicks: ""
-default_slack_team_name: myorg
-
 matterbridge_config:
   binary_checksum: "7cc2c2303cc7b532ed4734659e06446541a86cc26380f0e2e3f50129081504c1"
   version: 1.18.0
 
-  my_community:
-    irc:
-      bot_name: mb-community
-      channel: "##my-community"
-    slack:
-      channel: general
-
-  my_other_community:
-    irc:
-      bot_name: mb-othercomm
-      channel: "##my-other-community"
-    slack:
-      channel: random
-
+mbridge_bot_nick:
+mbridge_bridge_name:
+mbridge_irc_bot_pass:
+mbridge_irc_channel:
+mbridge_irc_ignore_nicks:
 mbridge_irc_label: IRC
-mbridge_telegram_label: TG
-mbridge_discord_label: DSCD
+mbridge_irc_network_server:
+mbridge_mattermost_channel:
+mbridge_mattermost_ignore_nicks:
+mbridge_mattermost_label: MM
+mbridge_mattermost_server:
+mbridge_mattermost_team:
+mbridge_mattermost_token:
+
