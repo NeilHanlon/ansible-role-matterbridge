@@ -3,17 +3,18 @@
 ###################################################################
 
 [irc]
-[irc.{{ mbridge_bridge_name }}]
-Server="{{ mbridge_irc_network_server }}"
-UseTLS=true
-SkipTLSVerify=false
+[irc.{{ matterbridge_config['bridge_name'] }}]
+Server="{{ matterbridge_config['irc']['server'] }}"
+UseTLS={{ matterbridge_config['irc']['use_tls'] }}
+SkipTLSVerify={{ matterbridge_config['irc']['skip_tls_verify'] }}
 
-Nick="{{ mbridge_bot_nick }}"
-UseSASL=true
-NickServNick="{{ mbridge_bot_nick }}"
+Nick="{{ matterbridge_config['bot_nick'] }}"
+UseSASL={{ matterbridge_config['use_sasl'] }}
+NickServNick="{{ matterbridge_config['bot_nick'] }}"
 NickServPassword="{{ mbridge_irc_bot_pass }}"
-Label="{{ mbridge_irc_label }}"
-# StripMarkdown=true
+Label="{{ matterbridge_config['irc']['label'] }}"
+
+StripMarkdown="{{ matterbridge_config['irc']['strip_markdown'] }}"
 
 ## RELOADABLE SETTINGS
 ## Settings below can be reloaded by editing the file
@@ -21,26 +22,26 @@ Label="{{ mbridge_irc_label }}"
 #Split messages on MessageLength instead of showing the <message clipped>
 #WARNING: this could lead to flooding
 #OPTIONAL (default false)
-MessageSplit=true
+MessageSplit={{ matterbridge_config['irc']['message_split'] }}
 
 #ColorNicks will show each nickname in a different color.
 #Only works in IRC right now.
-ColorNicks=true
+ColorNicks={{ matterbridge_config['irc']['color_nicks'] }}
 
 #Nicks you want to ignore.
 #Messages from those users will not be sent to other bridges.
 #OPTIONAL
-IgnoreNicks="{{ mbridge_irc_ignore_nicks }}"
+IgnoreNicks="{{ matterbridge_config['irc']['ignore_nicks'] | join(',') }}"
 
 #Enable to show users joins/parts from other bridges
 #Currently works for messages from the following bridges: irc, mattermost, slack
 #OPTIONAL (default false)
-ShowJoinPart=false
+ShowJoinPart={{ matterbridge_config['irc']['show_join_part'] }}
 
 #Enable to show topic changes from other bridges
 #Only works hiding/show topic changes from slack bridge for now
 #OPTIONAL (default false)
-ShowTopicChange=true
+ShowTopicChange={{ matterbridge_config['irc']['show_topic_change'] }}
 
 
 ###################################################################
@@ -51,9 +52,9 @@ ShowTopicChange=true
 #In this example we use [mattermost.work]
 #REQUIRED
 
-[mattermost.{{ mbridge_bridge_name }}]
-Server="{{ mbridge_mattermost_server }}"
-Team="{{ mbridge_mattermost_team }}"
+[mattermost.{{ matterbridge_config['bridge_name'] }}]
+Server="{{ matterbridge_config['mattermost']['server'] }}"
+Team="{{ matterbridge_config['mattermost']['team'] }}"
 Token="{{ mbridge_mattermost_token }}"
 
 NoTLS=false
@@ -101,7 +102,7 @@ IgnoreNicks="{{ mbridge_mattermost_ignore_nicks }}"
 #Messages you want to ignore.
 #Messages matching these regexp will be ignored and not sent to other bridges
 #See https://regex-golang.appspot.com/assets/html/index.html for more regex info
-#OPTIONAL (example below ignores messages starting with ~~ or messages containing badword
+matterbridge_config['mattermost']['toke#OPTIONAL (example below ignores messages starting with ~~ or messages containing badword
 IgnoreMessages=""
 
 #messages you want to replace.
@@ -134,7 +135,7 @@ ExtractNicks=[  ]
 
 #extra label that can be used in the RemoteNickFormat
 #optional (default empty)
-Label="{{ mbridge_mattermost_label }}"
+Label="{{ matterbridge_config['mattermost']['label'] }}"
 
 #Enable to show users joins/parts from other bridges
 #Currently works for messages from the following bridges: irc, mattermost, slack, discord
@@ -213,15 +214,17 @@ RemoteNickFormat="<{NICK}> "
 ###################################################################
 #Gateway configuration
 ###################################################################
-
+{% for gateway in in matterbridge_config['gateways'] %}
 [[gateway]]
-name="{{ mbridge_bridge_name }}"
+name="{{ matterbridge_config['bridge_name'] }}.{{ gateway['mattermost_channel'] }}"
 enable=true
 
     [[gateway.inout]]
-    account="irc.{{ mbridge_bridge_name }}"
-    channel="{{ mbridge_irc_channel }}"
+    account="irc.{{ matterbridge_config['bridge_name'] }}"
+    channel="{{ gateway['irc_channel'] }}"
 
     [[gateway.inout]]
-    account="mattermost.{{ mbridge_bridge_name }}"
-    channel="{{ mbridge_mattermost_channel }}"
+    account="mattermost.{{ matterbridge_config['bridge_name'] }}"
+    channel="{{ gateway['mattermost_channel'] }}"
+
+{% endfor %}
