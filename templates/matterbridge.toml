@@ -214,7 +214,7 @@ RemoteNickFormat="<{NICK}> "
 ###################################################################
 #Gateway configuration
 ###################################################################
-{% for gateway in in matterbridge_config['gateways'] %}
+{% for gateway in matterbridge_config['gateways'] %}
 [[gateway]]
 name="{{ matterbridge_config['bridge_name'] }}.{{ gateway['mattermost_channel'] }}"
 enable=true
