@@ -5,16 +5,16 @@
 [irc]
 [irc.{{ matterbridge_config['bridge_name'] }}]
 Server="{{ matterbridge_config['irc']['server'] }}"
-UseTLS={{ matterbridge_config['irc']['use_tls'] }}
-SkipTLSVerify={{ matterbridge_config['irc']['skip_tls_verify'] }}
+UseTLS={{ matterbridge_config['irc']['use_tls'] | lower }}
+SkipTLSVerify={{ matterbridge_config['irc']['skip_tls_verify'] | lower }}
 
 Nick="{{ matterbridge_config['bot_nick'] }}"
-UseSASL={{ matterbridge_config['use_sasl'] }}
+UseSASL={{ matterbridge_config['irc']['use_sasl'] | lower }}
 NickServNick="{{ matterbridge_config['bot_nick'] }}"
 NickServPassword="{{ mbridge_irc_bot_pass }}"
 Label="{{ matterbridge_config['irc']['label'] }}"
 
-StripMarkdown="{{ matterbridge_config['irc']['strip_markdown'] }}"
+StripMarkdown="{{ matterbridge_config['irc']['strip_markdown'] | lower }}"
 
 ## RELOADABLE SETTINGS
 ## Settings below can be reloaded by editing the file
@@ -22,11 +22,11 @@ StripMarkdown="{{ matterbridge_config['irc']['strip_markdown'] }}"
 #Split messages on MessageLength instead of showing the <message clipped>
 #WARNING: this could lead to flooding
 #OPTIONAL (default false)
-MessageSplit={{ matterbridge_config['irc']['message_split'] }}
+MessageSplit={{ matterbridge_config['irc']['message_split'] | lower }}
 
 #ColorNicks will show each nickname in a different color.
 #Only works in IRC right now.
-ColorNicks={{ matterbridge_config['irc']['color_nicks'] }}
+ColorNicks={{ matterbridge_config['irc']['color_nicks'] | lower }}
 
 #Nicks you want to ignore.
 #Messages from those users will not be sent to other bridges.
@@ -36,12 +36,12 @@ IgnoreNicks="{{ matterbridge_config['irc']['ignore_nicks'] | join(',') }}"
 #Enable to show users joins/parts from other bridges
 #Currently works for messages from the following bridges: irc, mattermost, slack
 #OPTIONAL (default false)
-ShowJoinPart={{ matterbridge_config['irc']['show_join_part'] }}
+ShowJoinPart={{ matterbridge_config['irc']['show_join_part'] | lower }}
 
 #Enable to show topic changes from other bridges
 #Only works hiding/show topic changes from slack bridge for now
 #OPTIONAL (default false)
-ShowTopicChange={{ matterbridge_config['irc']['show_topic_change'] }}
+ShowTopicChange={{ matterbridge_config['irc']['show_topic_change'] | lower }}
 
 
 ###################################################################
