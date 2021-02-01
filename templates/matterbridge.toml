@@ -102,7 +102,7 @@ IgnoreNicks="{{ mbridge_mattermost_ignore_nicks }}"
 #Messages you want to ignore.
 #Messages matching these regexp will be ignored and not sent to other bridges
 #See https://regex-golang.appspot.com/assets/html/index.html for more regex info
-matterbridge_config['mattermost']['toke#OPTIONAL (example below ignores messages starting with ~~ or messages containing badword
+#OPTIONAL (example below ignores messages starting with ~~ or messages containing badword
 IgnoreMessages=""
 
 #messages you want to replace.
